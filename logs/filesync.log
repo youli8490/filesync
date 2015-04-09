@@ -1,0 +1,5 @@
+18:04:13.947 [main] INFO  youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\软件技术\Develop Env文件（夹）为新增文件（夹），正在同步
+18:04:13.948 [main] INFO  youli.open.filesync.util.FileUtil -- 创建目录：G:\软件开发技术总结\软件技术\Develop Env
+18:04:13.948 [main] INFO  youli.open.filesync.util.FileUtil -- 拷贝文件：E:\软件开发技术总结\软件技术\Develop Env\Maven教程.docx  -->  G:\软件开发技术总结\软件技术\Develop Env
+18:04:13.950 [main] INFO  youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\软件技术\正则表达式.docx文件（夹）为新增文件（夹），正在同步
+18:04:13.950 [main] INFO  youli.open.filesync.util.FileUtil -- 拷贝文件：E:\软件开发技术总结\软件技术\正则表达式.docx  -->  G:\软件开发技术总结\软件技术
