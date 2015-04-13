@@ -18,16 +18,20 @@ public class FileSync {
         
         public void fileSync(File source, File destParent){
                 if(!source.exists() || !destParent.exists()){
-                        logger.error("源文件（夹）（" + source.getAbsolutePath() +
+                        logger.error("源文件夹（" + source.getAbsolutePath() +
                                         "）或目标文件夹（" + destParent.getAbsolutePath() + "）不存在");
                         return;
                 }
                 logger.info( source.getAbsolutePath() +"-->" + destParent.getAbsolutePath() + "，开始同步");
                 DirectorySyncData sourceSyncData = FileSyncCache.computeDirectorySyncCache(source);
                 DirectorySyncData destSyncData = FileSyncCache.computeDirectorySyncCache(new File(destParent, source.getName()));
-                updateFileToDest(sourceSyncData, destSyncData);
+                if(destSyncData != null)
+                        updateFileToDest(sourceSyncData, destSyncData);
+                else
+                        FileUtil.copyFile(source, destParent);
                 logger.info("------------------删除过期文件-------------------");
-                deleteOutDateFile(source.getParentFile(), new File(destParent, source.getName()));
+                destSyncData = FileSyncCache.computeDirectorySyncCache(new File(destParent, source.getName()));
+                deleteOutDateFile(sourceSyncData, destSyncData);
                 logger.info( source.getAbsolutePath() +"-->" + destParent.getAbsolutePath() + "，同步完成");
         }
         
@@ -50,7 +54,7 @@ public class FileSync {
                 	}else{//文件发生变化
                 		logger.trace(sourceFile.getAbsolutePath() + "文件发生变化，正在同步");
                 		FileUtil.deleteFile(destFile);
-                		 FileUtil.copyFile(sourceFile, destFileParent);
+                		FileUtil.copyFile(sourceFile, destFileParent);
                 	}
                 }
                //同步目录
@@ -60,27 +64,45 @@ public class FileSync {
                 Iterator<String> sourceDirectoryIterator = sourceDirectorySet.iterator();
                 while(sourceDirectoryIterator.hasNext()){
                 	String directoryName = sourceDirectoryIterator.next();
-                	updateFileToDest(sourceDirectoryMap.get(directoryName), destDirectoryMap.get(directoryName));
+                	DirectorySyncData destChildDirectorySyncData = destDirectoryMap.get(directoryName);
+                	if(destChildDirectorySyncData != null)
+                	        updateFileToDest(sourceDirectoryMap.get(directoryName), destChildDirectorySyncData);
+                	else
+                	        FileUtil.copyFile(new File(sourceFileParent, directoryName), destFileParent);
                 }
         }
         
         private boolean checkFileIsSame(FileSyncData source, FileSyncData dest){
+                if(dest == null)
+                        return false;
                 return source.getMD5().equals(dest.getMD5());
         }
         
-        private void deleteOutDateFile(File sourceParent, File dest){
-                File source = new File(sourceParent, dest.getName());
-                if(!source.exists()){
-                        logger.info(dest.getAbsolutePath() + "文件已过期，正在删除");
+        private void deleteOutDateFile(DirectorySyncData sourceSyncData, DirectorySyncData destSyncData){
+                File dest = new File(destSyncData.getFilePath());
+                if(sourceSyncData == null){
                         FileUtil.deleteFile(dest);
-                        return;
                 }
+                //删除过期文件
+                Map<String, FileSyncData> sourceFileMap = sourceSyncData.getFileMap();
+                Map<String, FileSyncData> destFileMap = destSyncData.getFileMap();
                 
-                if(dest.isFile())
-                        return;
-                
-                for(File child : dest.listFiles()){
-                        deleteOutDateFile(source, child);
+                Set<String> destFileSet = destFileMap.keySet();
+                Iterator<String> destFileIterator = destFileSet.iterator();
+                while(destFileIterator.hasNext()){
+                        String destChildFileName = destFileIterator.next();
+                        File destChildFile = new File(dest, destChildFileName);
+                        if(sourceFileMap.get(destChildFileName) == null)
+                                FileUtil.deleteFile(destChildFile);
+                }
+                //删除过期目录
+                Map<String, DirectorySyncData> sourceDirectoryMap = sourceSyncData.getDirectoryMap();
+                Map<String, DirectorySyncData> destDirectoryMap = destSyncData.getDirectoryMap();
+                Set<String> destDirectorySet = destDirectoryMap.keySet();
+                Iterator<String> destDirectoryIterator = destDirectorySet.iterator();
+                while(destDirectoryIterator.hasNext()){
+                        String destChildDirectoryName = destDirectoryIterator.next();
+                        deleteOutDateFile(sourceDirectoryMap.get(destChildDirectoryName), destDirectoryMap.get(destChildDirectoryName));
                 }
         }
 

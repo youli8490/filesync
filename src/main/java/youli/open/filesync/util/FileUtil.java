@@ -15,10 +15,11 @@ public class FileUtil {
 
         /**
          * 删除文件或目录，file若为文件，调用Java的delete()直接删除；file若为目录，递归删除目录。
-         * 使用者需自己校验file是否存在
          * @param file
          */
         public static void deleteFile(File file){
+                if(!file.exists())
+                        return;
                 if(file.isFile()){
                         logger.info("删除文件：" + file.getAbsolutePath());
                         file.delete();

@@ -3,3 +3,41 @@
 18:04:13.948 [main] INFO  youli.open.filesync.util.FileUtil -- 拷贝文件：E:\软件开发技术总结\软件技术\Develop Env\Maven教程.docx  -->  G:\软件开发技术总结\软件技术\Develop Env
 18:04:13.950 [main] INFO  youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\软件技术\正则表达式.docx文件（夹）为新增文件（夹），正在同步
 18:04:13.950 [main] INFO  youli.open.filesync.util.FileUtil -- 拷贝文件：E:\软件开发技术总结\软件技术\正则表达式.docx  -->  G:\软件开发技术总结\软件技术
+23:46:50.478 [main] INFO  youli.open.filesync.sync.FileSync -- E:\软件开发技术总结-->G:\，开始同步
+23:46:50.498 [main] INFO  youli.open.filesync.util.FileUtil -- 删除文件：G:\软件开发技术总结\初始文档格式.docx
+23:46:50.498 [main] INFO  youli.open.filesync.util.FileUtil -- 拷贝文件：E:\软件开发技术总结\初始文档格式.docx  -->  G:\软件开发技术总结
+23:48:47.118 [main] INFO  youli.open.filesync.sync.FileSync -- E:\软件开发技术总结-->G:\，开始同步
+23:48:47.138 [main] INFO  youli.open.filesync.util.FileUtil -- 拷贝文件：E:\软件开发技术总结\软件开发认识.docx  -->  G:\软件开发技术总结
+23:48:47.138 [main] INFO  youli.open.filesync.util.FileUtil -- 创建目录：G:\软件开发技术总结\软件概念
+23:48:47.138 [main] INFO  youli.open.filesync.util.FileUtil -- 拷贝文件：E:\软件开发技术总结\软件概念\.fileSync  -->  G:\软件开发技术总结\软件概念
+23:48:47.138 [main] INFO  youli.open.filesync.util.FileUtil -- 拷贝文件：E:\软件开发技术总结\软件概念\软件概念.docx  -->  G:\软件开发技术总结\软件概念
+23:48:47.158 [main] INFO  youli.open.filesync.util.FileUtil -- 拷贝文件：E:\软件开发技术总结\软件概念\集群与分布式.docx  -->  G:\软件开发技术总结\软件概念
+23:48:47.158 [main] INFO  youli.open.filesync.sync.FileSync -- ------------------删除过期文件-------------------
+23:48:47.168 [main] INFO  youli.open.filesync.util.FileUtil -- 删除文件：G:\软件开发技术总结\新建文本文档.txt
+23:48:47.168 [main] INFO  youli.open.filesync.sync.FileSync -- E:\软件开发技术总结-->G:\，同步完成
+23:50:12.399 [main] INFO  youli.open.filesync.sync.FileSync -- E:\软件开发技术总结-->G:\，开始同步
+23:50:12.419 [main] INFO  youli.open.filesync.util.FileUtil -- 拷贝文件：E:\软件开发技术总结\软件技术\新建文本文档.txt  -->  G:\软件开发技术总结\软件技术
+23:50:12.419 [main] INFO  youli.open.filesync.sync.FileSync -- ------------------删除过期文件-------------------
+23:50:12.429 [main] INFO  youli.open.filesync.sync.FileSync -- E:\软件开发技术总结-->G:\，同步完成
+23:51:12.750 [main] INFO  youli.open.filesync.sync.FileSync -- E:\软件开发技术总结-->G:\，开始同步
+23:51:12.760 [main] TRACE youli.open.filesync.sync.cache.FileSyncCache -- 计算（E:\软件开发技术总结\软件技术\新建文本文档2.txt）文件的FileSyncData
+23:51:12.770 [main] TRACE youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\初始文档格式.docx文件没有发生变化，无须同步
+23:51:12.770 [main] TRACE youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\软件开发认识.docx文件没有发生变化，无须同步
+23:51:12.770 [main] TRACE youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\软件技术\Web开发中文乱码.docx文件没有发生变化，无须同步
+23:51:12.770 [main] TRACE youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\软件技术\SQL.docx文件没有发生变化，无须同步
+23:51:12.770 [main] TRACE youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\软件技术\Windows7 下PPTP-L2TP设置.docx文件没有发生变化，无须同步
+23:51:12.770 [main] TRACE youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\软件技术\新建文本文档2.txt文件发生变化，正在同步
+23:51:12.770 [main] INFO  youli.open.filesync.util.FileUtil -- 拷贝文件：E:\软件开发技术总结\软件技术\新建文本文档2.txt  -->  G:\软件开发技术总结\软件技术
+23:51:12.770 [main] TRACE youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\软件技术\正则表达式.docx文件没有发生变化，无须同步
+23:51:12.770 [main] TRACE youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\软件技术\Windows下安装OpenVPN.docx文件没有发生变化，无须同步
+23:51:12.770 [main] TRACE youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\软件技术\Web Server\Netty.docx文件没有发生变化，无须同步
+23:51:12.770 [main] TRACE youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\软件技术\Develop Env\Maven教程.docx文件没有发生变化，无须同步
+23:51:12.770 [main] TRACE youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\软件概念\集群与分布式.docx文件没有发生变化，无须同步
+23:51:12.770 [main] TRACE youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\软件概念\软件概念.docx文件没有发生变化，无须同步
+23:51:12.770 [main] TRACE youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\RFC\RFC简介.docx文件没有发生变化，无须同步
+23:51:12.770 [main] TRACE youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\RFC\HTTP\rfc7230-HTTP1_1Message Syntax and Routing.txt.pdf文件没有发生变化，无须同步
+23:51:12.770 [main] TRACE youli.open.filesync.sync.FileSync -- E:\软件开发技术总结\RFC\HTTP\rfc2616-HTTP1_1.pdf文件没有发生变化，无须同步
+23:51:12.770 [main] INFO  youli.open.filesync.sync.FileSync -- ------------------删除过期文件-------------------
+23:51:12.770 [main] TRACE youli.open.filesync.sync.cache.FileSyncCache -- 计算（G:\软件开发技术总结\软件技术\新建文本文档2.txt）文件的FileSyncData
+23:51:12.780 [main] INFO  youli.open.filesync.util.FileUtil -- 删除文件：G:\软件开发技术总结\软件技术\新建文本文档.txt
+23:51:12.780 [main] INFO  youli.open.filesync.sync.FileSync -- E:\软件开发技术总结-->G:\，同步完成
