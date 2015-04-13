@@ -29,18 +29,17 @@ public class FileSyncCache {
         
         /**
          * 
-         * @param file 目录文件，若非目录返回null
+         * @param file 目录文件，若文件不存在或不是目录，返回null
          * @return
          */
         public static DirectorySyncData computeDirectorySyncCache(File file){
-                DirectorySyncData directorySyncData = new DirectorySyncData();
+                DirectorySyncData directorySyncData = null;
+                if(!file.exists() || !file.isDirectory())//文件不存在或不是目录，返回null
+                	return directorySyncData;
+                
+                directorySyncData = new DirectorySyncData();
                 //设置目录的绝对路径
                 directorySyncData.setFilePath(file.getAbsolutePath());
-                if(!file.exists())//文件不存在，直接返回
-                	return directorySyncData;
-                if(!file.isDirectory())//文件不是目录，返回null
-                	return null;
-                
                 //从硬盘上读取缓存数据
                 boolean conflictWithUserFile = initDirectorySyncData(file, directorySyncData);
                 //硬盘到内存的同步
@@ -195,6 +194,7 @@ public class FileSyncCache {
                 if(!file.exists())
                         return fileSyncData;
                 
+                logger.trace("计算（" + file.getAbsolutePath() + "）文件的FileSyncData");
                 fileSyncData = new FileSyncData();
                 
                 fileSyncData.setFileName(file.getName());
