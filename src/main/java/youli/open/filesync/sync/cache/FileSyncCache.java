@@ -194,7 +194,7 @@ public class FileSyncCache {
                 if(!file.exists())
                         return fileSyncData;
                 
-                logger.trace("计算（" + file.getAbsolutePath() + "）文件的FileSyncData");
+                logger.info("计算（" + file.getAbsolutePath() + "）文件的FileSyncData");
                 fileSyncData = new FileSyncData();
                 
                 fileSyncData.setFileName(file.getName());

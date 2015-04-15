@@ -82,6 +82,7 @@ public class FileSync {
                 File dest = new File(destSyncData.getFilePath());
                 if(sourceSyncData == null){
                         FileUtil.deleteFile(dest);
+                        return;
                 }
                 //删除过期文件
                 Map<String, FileSyncData> sourceFileMap = sourceSyncData.getFileMap();

@@ -9,7 +9,7 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Logger name="youli.open.filesync" level="trace" additivity="false">
+		<Logger name="youli.open.filesync" level="info" additivity="false">
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="File" />
 		</Logger>
