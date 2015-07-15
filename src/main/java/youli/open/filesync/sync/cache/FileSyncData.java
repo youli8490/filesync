@@ -3,7 +3,8 @@ package youli.open.filesync.sync.cache;
 import java.io.IOException;
 
 /**
- * 一个@FileSyncData对象记录着一个文件的文件名、MD5值、最后修改时间及文件大小
+ * 一个{@FileSyncData}对象记录着一个文件的文件名、MD5值、最后修改时间及文件大小，
+ * 持久化数据存放在同级目录的{@FileSyncCache.Sync_Cache_File_Name}文件的一行。
  * @author youli
  *
  */

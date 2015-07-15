@@ -39,7 +39,7 @@ public class MDUtil {
                         }while(length == MD5_BS_NUM);
                         
                 }catch(IOException e){
-                        e.printStackTrace();
+                        logger.error(e);
                 }finally{
                         try{
                                 if(fis != null)

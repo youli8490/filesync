@@ -1,5 +1,5 @@
 rem this is a GBK encode File
-if "%1" == "" (
+if %1 == "" (
 	echo fail!
 	pause
 	exit

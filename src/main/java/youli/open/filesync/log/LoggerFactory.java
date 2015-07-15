@@ -19,7 +19,6 @@ public class LoggerFactory {
 		if(workingHome != null && !"".equals(workingHome)){
 			RebuildRuntimeEnv.refreshWorkingHome(workingHome);
 		}
-		System.out.println(workingHome);
 		//2、读取log4j的配置文件
                 try {
                         FileInputStream fis = new FileInputStream(EnvConfig.LOG4J_CONFIG);

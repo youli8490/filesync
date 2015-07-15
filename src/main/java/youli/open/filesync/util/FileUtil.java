@@ -1,9 +1,16 @@
 package youli.open.filesync.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.logging.log4j.Logger;
 
@@ -97,6 +104,52 @@ public class FileUtil {
                                 logger.error("文件拷贝结束后，释放资源失败！");
                         }
                 }
+        }
+        
+        /**
+         * 将文件以指定的编码读取出来，一行一行的添加进List中
+         * @param filePath 待读取的文件
+         * @param charSet 读取文件的编码
+         * @return
+         */
+        public static List<String> readConfigureFile(String filePath, Charset charSet){
+        	File source = new File(filePath);
+        	if(!source.exists())
+        		return null;
+        	
+        	List<String> result = new LinkedList<String>();
+        	FileInputStream fis = null;
+        	BufferedReader br = null;
+        	try {
+			fis = new FileInputStream(source);
+			br = new BufferedReader(new InputStreamReader(fis, charSet));
+			String str = null;
+			while((str = br.readLine()) != null){
+				result.add(str);
+			}
+		} catch (FileNotFoundException e) {
+			logger.error(e);
+		} catch (UnsupportedEncodingException e) {
+			logger.error(e);
+		} catch (IOException e) {
+			logger.error(e);
+		}finally{
+			if(br != null){
+				try {
+					br.close();
+				} catch (IOException e) {
+					logger.error(e);
+				}
+			}
+			if(fis != null){
+				try {
+					fis.close();
+				} catch (IOException e) {
+					logger.error(e);
+				}
+			}
+		}
+        	return result;
         }
         
         public static void main(String[] args) {

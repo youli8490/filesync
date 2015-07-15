@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 每个目录对应一个“.filesync”文件，
- * 每个文件的FileSyncData存储在fileMap中，
- * 每个目录的DirectorySyncData存储在directoryMap中
+ * {@DirectorySyncData}对象标识着一个目录的缓存数据，filePath指明目录的绝对路径。
+ * 目录中每个子文件的FileSyncData存储在fileMap中，
+ * 目录中每个子目录的DirectorySyncData存储在directoryMap中。
  * @author youli
  *
  */

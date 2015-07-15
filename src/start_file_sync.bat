@@ -5,4 +5,4 @@ rem echo off 关闭指令在控制台打印功能
 @echo off
 set work_home=%cd%
 cd bin
-start.bat %work_home%
+start.bat "%work_home%"
