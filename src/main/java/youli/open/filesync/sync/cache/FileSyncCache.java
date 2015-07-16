@@ -43,7 +43,6 @@ public class FileSyncCache {
 		// 文件不存在、或不是目录、再或不满足同步策略，返回null
 		if (!syncedDirectory.exists() || !syncedDirectory.isDirectory() || !syncStrategy.isSync(syncedDirectory))
 			return directorySyncData;
-		logger.info("正在初始化（" + syncedDirectory.getAbsolutePath() + "）目录的同步缓存数据...");
 		directorySyncData = new DirectorySyncData();
 		// 设置目录的绝对路径
 		directorySyncData.setFilePath(syncedDirectory.getAbsolutePath());
