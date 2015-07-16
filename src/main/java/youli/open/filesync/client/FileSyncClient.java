@@ -14,5 +14,6 @@ public class FileSyncClient {
                 FileSync sync = new FileSync();
                 sync.init();
                 sync.fileSync();
+                logger.info("FileSyncClient end.");
         }
 }

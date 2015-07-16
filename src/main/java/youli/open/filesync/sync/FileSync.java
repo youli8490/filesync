@@ -60,7 +60,7 @@ public class FileSync {
 
 	public void fileSync() {
 		if (syncSourceData == null) {
-			logger.info("请先执行init方法！");
+			logger.error("请先执行init方法！");
 			return;
 		}
 		for (SyncSourceData data : syncSourceData) {
@@ -96,7 +96,7 @@ public class FileSync {
 	}
 
 	public void updateFileToDest(DirectorySyncData sourceSyncData, DirectorySyncData destSyncData) {
-		logger.info("正在同步目录：" + sourceSyncData.getFilePath());
+		logger.debug("正在同步目录：" + sourceSyncData.getFilePath());
 		// 同步文件
 		File sourceFileParent = new File(sourceSyncData.getFilePath());
 		File destFileParent = new File(destSyncData.getFilePath());
@@ -129,7 +129,7 @@ public class FileSync {
 			if (destChildDirectorySyncData != null)
 				updateFileToDest(sourceDirectoryMap.get(directoryName), destChildDirectorySyncData);
 			else {
-				logger.debug(sourceSyncData.getFilePath() + "对应的目录不存在，直接全部拷贝。");
+				logger.debug(sourceSyncData.getFilePath() + File.separator + directoryName +"对应的目录不存在，直接全部拷贝。");
 				FileUtil.copyFile(new File(sourceFileParent, directoryName), destFileParent);
 			}
 		}

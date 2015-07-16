@@ -43,7 +43,7 @@ public class FileSyncCache {
 		// 文件不存在、或不是目录、再或不满足同步策略，返回null
 		if (!syncedDirectory.exists() || !syncedDirectory.isDirectory() || !syncStrategy.isSync(syncedDirectory))
 			return directorySyncData;
-
+		logger.info("正在初始化（" + syncedDirectory.getAbsolutePath() + "）目录的同步缓存数据...");
 		directorySyncData = new DirectorySyncData();
 		// 设置目录的绝对路径
 		directorySyncData.setFilePath(syncedDirectory.getAbsolutePath());
@@ -162,7 +162,7 @@ public class FileSyncCache {
 			return false;
 		String firstRowStr = syncCacheList.get(0);
 		if (!Sync_Cache_File_Valid_Str.equals(firstRowStr)) {// 检测用户文件与缓存文件重名
-			logger.error(syncedDirectory.getAbsolutePath() + "目录下存在用户的" + Sync_Cache_File_Name + "文件，忽略同步此目录");
+			logger.warn(syncedDirectory.getAbsolutePath() + "目录下存在用户的" + Sync_Cache_File_Name + "文件，忽略同步此目录");
 			return true;
 		}
 		for (int i = 1; i < syncCacheList.size(); i++) {
