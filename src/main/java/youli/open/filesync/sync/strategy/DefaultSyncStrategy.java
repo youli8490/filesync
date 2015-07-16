@@ -82,13 +82,17 @@ public class DefaultSyncStrategy implements SyncStrategy {
 	@Override
 	public boolean isSync(File file) {
 		for(String white : syncStrategyWhite){
-			if(file.getAbsolutePath().contains(white))
+			if(file.getAbsolutePath().contains(white)){
+				logger.debug("（" + file.getAbsolutePath() +"）匹配了白名单策略（" + white + "）");
 				return true;
+			}
 		}
 		
 		for(String black : syncStrategyBlack){
-			if(file.getName().contains(black))
+			if(file.getName().contains(black)){
+				logger.debug("（" + file.getName() +"）匹配了黑名单策略（" + black + "）");
 				return false;
+			}
 		}
 		return true;
 	}

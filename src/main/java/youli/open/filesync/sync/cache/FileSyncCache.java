@@ -61,6 +61,7 @@ public class FileSyncCache {
 			// 如果缓存文件不与用户文件冲突，则本目录进行同步
 			else if (f.isFile() && !conflictWithUserFile && !f.getName().equals(Sync_Cache_File_Name)) {
 				FileSyncData fileSyncData = directorySyncData.getFileMap().get(f.getName());
+				//新加源文件、或源文件发生改变，更新缓存文件
 				if (fileSyncData == null || fileSyncData.getDate() != f.lastModified()){
 					directorySyncData.getFileMap().put(f.getName(), computeFileSyncCache(f));
 					needSave = true;
@@ -71,12 +72,15 @@ public class FileSyncCache {
 		Set<String> fileCacheSet = directorySyncData.getFileMap().keySet();
 		String[] fileCacheArray = fileCacheSet.toArray(new String[0]);
 		for (String childFileName : fileCacheArray) {
-			if (!new File(syncedDirectory, childFileName).exists())
+			//源文件已被删除，更新缓存文件
+			if (!new File(syncedDirectory, childFileName).exists()){
 				directorySyncData.getFileMap().remove(childFileName);
+				needSave = true;
+			}
 		}
 		// 将缓存数据写入到硬盘上
 		if (needSave)
-			saveDirectorySyncData(syncedDirectory, directorySyncData);
+			saveDirectorySyncData(directorySyncData);
 
 		return directorySyncData;
 	}
@@ -84,14 +88,17 @@ public class FileSyncCache {
 	/**
 	 * 保存最新的文件MD信息
 	 * 此处不再检测是否会有缓存文件冲突，因为若有缓存文件冲突，此时DirectorySyncData的文件同步缓存一定为空
-	 * @param file
 	 * @param directorySyncData
 	 */
-	private static void saveDirectorySyncData(File file, DirectorySyncData directorySyncData) {
-		File syncFile = new File(file, Sync_Cache_File_Name);
-
-		logger.debug("正在写入" + syncFile.getAbsolutePath());
-		if (directorySyncData.getFileMap().size() > 0) {
+	public static void saveDirectorySyncData(DirectorySyncData directorySyncData) {
+		File syncFile = new File(directorySyncData.getFilePath(), Sync_Cache_File_Name);
+		
+		if (directorySyncData.getFileMap().size() == 0){
+			logger.info(directorySyncData.getFilePath() + "目录下无普通文件，删除缓存文件...");
+			FileUtil.deleteFile(syncFile);
+		}
+		else {
+			logger.info(syncFile.getAbsolutePath() + "缓存已过期，正在重新写入...");
 			FileOutputStream fos = null;
 			OutputStreamWriter osw = null;
 			BufferedWriter bw = null;

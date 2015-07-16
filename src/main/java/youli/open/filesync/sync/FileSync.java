@@ -86,7 +86,7 @@ public class FileSync {
 		if (destSyncData != null)
 			updateFileToDest(sourceSyncData, destSyncData);
 		else{
-			logger.debug(sourceSyncData.getFilePath() + "对应的目录不存在，直接全部拷贝。");
+			logger.info(sourceSyncData.getFilePath() + "对应的目录不存在，直接全部拷贝。");
 			FileUtil.copyFile(source, destParent);
 		}
 		logger.info("------------------删除过期文件-------------------");
@@ -113,7 +113,7 @@ public class FileSync {
 			if (checkFileIsSame(sourceFileMap.get(fileName), destFileMap.get(fileName))) {// 文件没有发生变化
 				logger.debug(sourceFile.getAbsolutePath() + "文件没有发生变化，无须同步");
 			} else {// 文件发生变化
-				logger.debug(sourceFile.getAbsolutePath() + "文件发生变化，正在同步");
+				logger.info(sourceFile.getAbsolutePath() + "文件发生变化，正在同步");
 				FileUtil.deleteFile(destFile);
 				FileUtil.copyFile(sourceFile, destFileParent);
 			}
@@ -129,7 +129,7 @@ public class FileSync {
 			if (destChildDirectorySyncData != null)
 				updateFileToDest(sourceDirectoryMap.get(directoryName), destChildDirectorySyncData);
 			else {
-				logger.debug(sourceSyncData.getFilePath() + File.separator + directoryName +"对应的目录不存在，直接全部拷贝。");
+				logger.info(sourceSyncData.getFilePath() + File.separator + directoryName +"对应的目录不存在，直接全部拷贝。");
 				FileUtil.copyFile(new File(sourceFileParent, directoryName), destFileParent);
 			}
 		}
@@ -144,6 +144,7 @@ public class FileSync {
 	private void deleteOutDateFile(DirectorySyncData sourceSyncData, DirectorySyncData destSyncData) {
 		File dest = new File(destSyncData.getFilePath());
 		if (sourceSyncData == null) {
+			logger.info(destSyncData.getFilePath() + "目录已过期，准备删除...");
 			FileUtil.deleteFile(dest);
 			return;
 		}
@@ -153,12 +154,25 @@ public class FileSync {
 
 		Set<String> destFileSet = destFileMap.keySet();
 		Iterator<String> destFileIterator = destFileSet.iterator();
+		//若目的目录存在过期文件，同步后需更新缓存文件
+		boolean needSaveSyncCache = false;
 		while (destFileIterator.hasNext()) {
 			String destChildFileName = destFileIterator.next();
 			File destChildFile = new File(dest, destChildFileName);
-			if (sourceFileMap.get(destChildFileName) == null)
+			if (sourceFileMap.get(destChildFileName) == null){
+				logger.info(destChildFile.getAbsolutePath() + "文件已过期，准备删除...");
+				//1、删除过期文件
 				FileUtil.deleteFile(destChildFile);
+				//2、删除缓存数据
+				destFileMap.remove(destChildFileName);
+				needSaveSyncCache = true;
+			}
 		}
+		if(needSaveSyncCache){
+			//将缓存数据更新到缓存文件中
+			FileSyncCache.saveDirectorySyncData(destSyncData);
+		}
+		
 		// 删除过期目录
 		Map<String, DirectorySyncData> sourceDirectoryMap = sourceSyncData.getDirectoryMap();
 		Map<String, DirectorySyncData> destDirectoryMap = destSyncData.getDirectoryMap();
