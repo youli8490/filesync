@@ -164,7 +164,7 @@ public class FileSync {
 				//1、删除过期文件
 				FileUtil.deleteFile(destChildFile);
 				//2、删除缓存数据
-				destFileMap.remove(destChildFileName);
+				destFileIterator.remove();
 				needSaveSyncCache = true;
 			}
 		}
