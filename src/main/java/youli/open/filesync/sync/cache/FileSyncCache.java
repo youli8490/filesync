@@ -46,9 +46,9 @@ public class FileSyncCache {
 		directorySyncData = new DirectorySyncData();
 		// 设置目录的绝对路径
 		directorySyncData.setFilePath(syncedDirectory.getAbsolutePath());
-		// 从硬盘上读取缓存数据
+		// 1、从硬盘上读取缓存数据
 		boolean conflictWithUserFile = initDirectorySyncData(syncedDirectory, directorySyncData);
-		// 硬盘到内存的同步
+		// 2、更新缓存数据
 		File[] files = syncedDirectory.listFiles();
 		// 是否需要回写到硬盘
 		boolean needSave = false;
@@ -68,7 +68,7 @@ public class FileSyncCache {
 				}
 			}
 		}
-		// 内存到硬盘的同步
+		// 3、删除已过期的缓存数据
 		Set<String> fileCacheSet = directorySyncData.getFileMap().keySet();
 		String[] fileCacheArray = fileCacheSet.toArray(new String[0]);
 		for (String childFileName : fileCacheArray) {
@@ -78,7 +78,7 @@ public class FileSyncCache {
 				needSave = true;
 			}
 		}
-		// 将缓存数据写入到硬盘上
+		// 4、将缓存数据写入到硬盘上
 		if (needSave)
 			saveDirectorySyncData(directorySyncData);
 
