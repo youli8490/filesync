@@ -63,7 +63,10 @@ public class FileSyncCache {
 				FileSyncData fileSyncData = directorySyncData.getFileMap().get(f.getName());
 				//新加源文件、或源文件发生改变，更新缓存文件
 				if (fileSyncData == null || fileSyncData.getDate() != f.lastModified()){
-					directorySyncData.getFileMap().put(f.getName(), computeFileSyncCache(f));
+					FileSyncData newFileSyncData = computeFileSyncCache(f);
+					if(newFileSyncData == null)
+						continue;
+					directorySyncData.getFileMap().put(f.getName(), newFileSyncData);
 					needSave = true;
 				}
 			}

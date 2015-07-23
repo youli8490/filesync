@@ -12,8 +12,12 @@ public class FileSyncClient {
         public static void main(String[] args){
         	logger.info("FileSyncClient start.");
                 FileSync sync = new FileSync();
-                sync.init();
-                sync.fileSync();
+                try{
+	                sync.init();
+	                sync.fileSync();
+                }catch(Exception e){
+                	logger.error(e);
+                }
                 logger.info("FileSyncClient end.");
         }
 }
