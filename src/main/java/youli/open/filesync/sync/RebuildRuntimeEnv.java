@@ -5,10 +5,9 @@ import java.io.File;
 public class RebuildRuntimeEnv {
 	
 	public static void refreshWorkingHome(String workingHome){
-		EnvConfig.DIRECTORY_SYNC = workingHome + File.separator + EnvConfig.DIRECTORY_SYNC;
+		EnvConfig.Sync_Path = workingHome + File.separator + EnvConfig.Sync_Path;
 		EnvConfig.LOG4J_CONFIG = workingHome + File.separator + EnvConfig.LOG4J_CONFIG;
-		EnvConfig.SYNC_STRATEGY_WHITE = workingHome + File.separator + EnvConfig.SYNC_STRATEGY_WHITE;
-		EnvConfig.SYNC_STRATEGY_BLACK = workingHome + File.separator + EnvConfig.SYNC_STRATEGY_BLACK;
+		EnvConfig.Sync_Filter = workingHome + File.separator + EnvConfig.Sync_Filter;
 	}
 
 }

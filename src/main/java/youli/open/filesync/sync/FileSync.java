@@ -2,8 +2,6 @@ package youli.open.filesync.sync;
 
 import java.io.File;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,71 +11,29 @@ import youli.open.filesync.log.LoggerFactory;
 import youli.open.filesync.sync.cache.DirectorySyncData;
 import youli.open.filesync.sync.cache.FileSyncCache;
 import youli.open.filesync.sync.cache.FileSyncData;
+import youli.open.filesync.sync.strategy.SyncStrategy;
 import youli.open.filesync.util.FileUtil;
 
 public class FileSync {
 	private static Logger logger = LoggerFactory.getLogger(FileSync.class);
-	// 待同步任务数据
-	private List<SyncSourceData> syncSourceData;
-	// 备选的待同步任务数据，不进行同步操作
-	private List<SyncSourceData> reserveSyncSourceData;
 
-	public void init() {
-		// 1、清空validSyncSourceData及ignoreSyncSourceData
-		if (syncSourceData == null)
-			syncSourceData = new LinkedList<SyncSourceData>();
-		else
-			syncSourceData.clear();
-		if (reserveSyncSourceData == null)
-			reserveSyncSourceData = new LinkedList<SyncSourceData>();
-		else
-			reserveSyncSourceData.clear();
-
-		logger.info("读取配置文件：" + EnvConfig.DIRECTORY_SYNC);
-		List<String> syncSourceList = FileUtil.readConfigureFile(EnvConfig.DIRECTORY_SYNC, EnvConfig.CONF_CHARSET);
-		if (syncSourceList == null) {
+	public void fileSync(SyncPath path, SyncStrategy syncStrategy) {
+	    if(path == null)
 			return;
-		}
-
-		for (String str : syncSourceList) {
-			SyncSourceData data = null;
-			if (str.startsWith(EnvConfig.CONF_DESC_PREFIX))
-				continue;
-			// 备选行的内容添加到备选列表中
-			if (str.startsWith(EnvConfig.CONF_RESERVE_PREFIX)) {
-				data = SyncSourceData.instance(str.substring(EnvConfig.CONF_RESERVE_PREFIX.length()));
-				if (data != null)
-					reserveSyncSourceData.add(data);
-			} else {
-				data = SyncSourceData.instance(str);
-				if (data != null)
-					syncSourceData.add(data);
-			}
-
-		}
-
+	    
+		File source = new File(path.getSource());
+		File destParent = new File(path.getDestination());
+		doFileSync(source, destParent, syncStrategy);
 	}
 
-	public void fileSync() {
-		if (syncSourceData == null) {
-			logger.error("请先执行init方法！");
-			return;
-		}
-		for (SyncSourceData data : syncSourceData) {
-			File source = new File(data.getSource());
-			File destParent = new File(data.getDestination());
-			doFileSync(source, destParent);
-		}
-	}
-
-	private void doFileSync(File source, File destParent) {
+	private void doFileSync(File source, File destParent, SyncStrategy syncStrategy) {
 		if (!source.exists() || !source.isDirectory() || !destParent.exists() || !destParent.isDirectory()) {
 			logger.warn("源文件夹（" + source.getAbsolutePath() + "）或目标文件夹（" + destParent.getAbsolutePath() + "）不存在");
 			return;
 		}
 		logger.info(source.getAbsolutePath() + "-->" + destParent.getAbsolutePath() + "，开始同步");
-		DirectorySyncData sourceSyncData = FileSyncCache.computeDirectorySyncCache(source);
-		DirectorySyncData destSyncData = FileSyncCache.computeDirectorySyncCache(new File(destParent, source.getName()));
+		DirectorySyncData sourceSyncData = FileSyncCache.computeDirectorySyncCache(source, syncStrategy);
+		DirectorySyncData destSyncData = FileSyncCache.computeDirectorySyncCache(new File(destParent, source.getName()), syncStrategy);
 		if (sourceSyncData == null) {
 			logger.warn("源文件夹（" + source.getAbsolutePath() + "）匹配上了同步策略黑名单，请查看！！！");
 			return;
@@ -90,7 +46,7 @@ public class FileSync {
 			FileUtil.copyFile(source, destParent);
 		}
 		logger.info("------------------删除过期文件-------------------");
-		destSyncData = FileSyncCache.computeDirectorySyncCache(new File(destParent, source.getName()));
+		destSyncData = FileSyncCache.computeDirectorySyncCache(new File(destParent, source.getName()), syncStrategy);
 		deleteOutDateFile(sourceSyncData, destSyncData);
 		logger.info(source.getAbsolutePath() + "-->" + destParent.getAbsolutePath() + "，同步完成");
 	}
@@ -182,22 +138,6 @@ public class FileSync {
 			String destChildDirectoryName = destDirectoryIterator.next();
 			deleteOutDateFile(sourceDirectoryMap.get(destChildDirectoryName), destDirectoryMap.get(destChildDirectoryName));
 		}
-	}
-
-	public List<SyncSourceData> getSyncSourceData() {
-		return syncSourceData;
-	}
-
-	public void setSyncSourceData(List<SyncSourceData> syncSourceData) {
-		this.syncSourceData = syncSourceData;
-	}
-
-	public List<SyncSourceData> getReserveSyncSourceData() {
-		return reserveSyncSourceData;
-	}
-
-	public void setReserveSyncSourceData(List<SyncSourceData> reserveSyncSourceData) {
-		this.reserveSyncSourceData = reserveSyncSourceData;
 	}
 
 	public static void main(String[] args) {

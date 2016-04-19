@@ -9,7 +9,7 @@ public class DefaultSyncStrategyTest {
 
 	@Test
 	public void test() {
-		DefaultSyncStrategy strategy = new DefaultSyncStrategy();
+		DefaultSyncStrategy strategy = DefaultSyncStrategy.createDefaultSyncStrategy();
 		File file = new File("conf/sync_strategy_white.conf");
 		Assert.assertTrue(strategy.isSync(file));
 	}

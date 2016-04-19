@@ -19,7 +19,6 @@ import org.apache.logging.log4j.Logger;
 
 import youli.open.filesync.log.LoggerFactory;
 import youli.open.filesync.sync.EnvConfig;
-import youli.open.filesync.sync.strategy.DefaultSyncStrategy;
 import youli.open.filesync.sync.strategy.SyncStrategy;
 import youli.open.filesync.util.FileUtil;
 import youli.open.filesync.util.MDUtil;
@@ -27,8 +26,6 @@ import youli.open.filesync.util.MDUtil;
 public class FileSyncCache {
 	private final static String Sync_Cache_File_Name = ".fileSync";
 	private final static String Sync_Cache_File_Valid_Str = "This is a FileSyncCache file.";
-
-	private static SyncStrategy syncStrategy = new DefaultSyncStrategy();
 
 	private static Logger logger = LoggerFactory.getLogger(FileSyncCache.class);
 
@@ -38,7 +35,7 @@ public class FileSyncCache {
 	 * @return DirectorySyncData，表示当前硬盘上目录的实际缓存数据。有一个目录，就有一个{@DirectorySyncData}对象，
 	 * 有一个文件，就有一个{@FileSyncData}对象，当然得满足同步策略。
 	 */
-	public static DirectorySyncData computeDirectorySyncCache(File syncedDirectory) {
+	public static DirectorySyncData computeDirectorySyncCache(File syncedDirectory, SyncStrategy syncStrategy) {
 		DirectorySyncData directorySyncData = null;
 		// 文件不存在、或不是目录、再或不满足同步策略，返回null
 		if (!syncedDirectory.exists() || !syncedDirectory.isDirectory() || !syncStrategy.isSync(syncedDirectory))
@@ -54,7 +51,7 @@ public class FileSyncCache {
 		boolean needSave = false;
 		for (File f : files) {
 			if (f.isDirectory()) {
-				DirectorySyncData childDirectorySyncData = computeDirectorySyncCache(f);
+				DirectorySyncData childDirectorySyncData = computeDirectorySyncCache(f, syncStrategy);
 				if(childDirectorySyncData != null)
 					directorySyncData.getDirectoryMap().put(f.getName(), childDirectorySyncData);
 			}
@@ -63,7 +60,7 @@ public class FileSyncCache {
 				FileSyncData fileSyncData = directorySyncData.getFileMap().get(f.getName());
 				//新加源文件、或源文件发生改变，更新缓存文件
 				if (fileSyncData == null || fileSyncData.getDate() != f.lastModified()){
-					FileSyncData newFileSyncData = computeFileSyncCache(f);
+					FileSyncData newFileSyncData = computeFileSyncCache(f, syncStrategy);
 					if(newFileSyncData == null)
 						continue;
 					directorySyncData.getFileMap().put(f.getName(), newFileSyncData);
@@ -183,7 +180,7 @@ public class FileSyncCache {
 		return false;
 	}
 
-	private static FileSyncData computeFileSyncCache(File file) {
+	private static FileSyncData computeFileSyncCache(File file, SyncStrategy syncStrategy) {
 		FileSyncData fileSyncData = null;
 		if (!file.exists() || !file.isFile() || !syncStrategy.isSync(file))
 			return fileSyncData;
