@@ -21,22 +21,13 @@ public class EnvConfig {
 	/**
 	 * 待同步目录配置文件
 	 */
-	public static String DIRECTORY_SYNC = "conf/directory_sync.conf";
-	/**
-	 * 同步配置文件中，源与目的地址的分隔符
-	 */
-	public static String SRC_DELIMITER_DEST = "-->";
+	public static String Sync_Path = "conf/sync_path.conf";
 	
 	/**
 	 * 同步策略黑名单配置文件
 	 */
-	public static String SYNC_STRATEGY_BLACK = "conf/sync_strategy_black.conf";
+	public static String Sync_Filter = "conf/sync_filter.conf";
 	
-	/**
-	 * 同步策略白名单配置文件
-	 */
-	public static String SYNC_STRATEGY_WHITE = "conf/sync_strategy_white.conf";
-
 	/**
 	 * 日志配置文件
 	 */

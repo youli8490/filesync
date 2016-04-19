@@ -4,21 +4,28 @@ package youli.open.filesync.sync;
  * 对应directory_sync.conf中的一行数据
  * @author youli
  */
-public class SyncSourceData {
+public class SyncPath {
+    public static String SRC_DELIMITER_DEST = "-->";
+    
 	private String source;
 	private String destination;
 	
-	public static SyncSourceData instance(String str){
+	public static SyncPath instance(String str){
 		if(str == null)
 			return null;
-		String[] ss = str.split(EnvConfig.SRC_DELIMITER_DEST);
+		String[] ss = str.split(SRC_DELIMITER_DEST);
 		if(ss.length != 2 || "".equals(ss[0]) || "".equals(ss[1]))
 			return null;
 		
-		SyncSourceData data = new SyncSourceData();
-		data.setSource(ss[0]);
-		data.setDestination(ss[1]);
-		return data;
+		SyncPath syncPath = new SyncPath();
+		syncPath.setSource(ss[0]);
+		syncPath.setDestination(ss[1]);
+		return syncPath;
+	}
+	
+	@Override
+	public String toString() {
+	    return source + SRC_DELIMITER_DEST + destination;
 	}
 	
 	public String getSource() {

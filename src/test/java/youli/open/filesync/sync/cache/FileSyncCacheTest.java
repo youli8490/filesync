@@ -4,12 +4,14 @@ import java.io.File;
 
 import org.junit.Test;
 
+import youli.open.filesync.sync.strategy.DefaultSyncStrategy;
+
 public class FileSyncCacheTest {
 
         @Test
         public void testComputeDirectorySyncCache() {
                 File file = new File("E:/eclipse-workspace/android");
-                FileSyncCache.computeDirectorySyncCache(file);
+                FileSyncCache.computeDirectorySyncCache(file, DefaultSyncStrategy.createDefaultSyncStrategy());
         }
 
         @Test
