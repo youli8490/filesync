@@ -2,6 +2,7 @@ package youli.open.filesync.sync;
 
 import java.io.File;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,15 +18,22 @@ import youli.open.filesync.util.FileUtil;
 public class FileSync {
 	private static Logger logger = LoggerFactory.getLogger(FileSync.class);
 
-	public void fileSync(SyncPath path, SyncStrategy syncStrategy) {
-	    if(path == null)
-			return;
-	    
-		File source = new File(path.getSource());
-		File destParent = new File(path.getDestination());
-		doFileSync(source, destParent, syncStrategy);
+	public void fileSyncBatch(List<String> paths, SyncStrategy syncStrategy) {
+		for(String path : paths){
+			fileSync(path, syncStrategy);
+		}
 	}
 
+	public void fileSync(String path, SyncStrategy syncStrategy) {
+		SyncPath syncPath = SyncPath.instance(path);
+	    if(syncPath == null)
+			return;
+	    
+		File source = new File(syncPath.getSource());
+		File destParent = new File(syncPath.getDestination());
+		doFileSync(source, destParent, syncStrategy);
+	}
+	
 	private void doFileSync(File source, File destParent, SyncStrategy syncStrategy) {
 		if (!source.exists() || !source.isDirectory() || !destParent.exists() || !destParent.isDirectory()) {
 			logger.warn("源文件夹（" + source.getAbsolutePath() + "）或目标文件夹（" + destParent.getAbsolutePath() + "）不存在");

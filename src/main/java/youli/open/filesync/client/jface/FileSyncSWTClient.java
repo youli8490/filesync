@@ -4,8 +4,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.Logger;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.window.ApplicationWindow;
@@ -33,6 +35,7 @@ import youli.open.filesync.client.jface.util.SWTListUtil;
 import youli.open.filesync.config.SyncFilterConfig;
 import youli.open.filesync.config.SyncPathConfig;
 import youli.open.filesync.log.LoggerFactory;
+import youli.open.filesync.log.SyncAppender;
 import youli.open.filesync.sync.EnvConfig;
 import youli.open.filesync.sync.FileSync;
 import youli.open.filesync.sync.SyncFilter;
@@ -41,13 +44,15 @@ import youli.open.filesync.sync.strategy.DefaultSyncStrategy;
 import youli.open.filesync.sync.strategy.SyncStrategy;
 
 public class FileSyncSWTClient extends ApplicationWindow {
-	private static Logger logger = LoggerFactory.getLogger(FileSyncSWTClient.class);
+	private static Logger logger = (Logger) LoggerFactory.getLogger(FileSyncSWTClient.class);
 
 	private Table syncPathTable;
 	private List syncFilterList;
 	private Text syncLogText;
 	private SyncFilterConfig syncFilterConfig;
 	private SyncPathConfig syncPathConfig;
+	
+	private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	public FileSyncSWTClient() {
 		super(null);
@@ -96,6 +101,9 @@ public class FileSyncSWTClient extends ApplicationWindow {
 
 		syncLogText = new Text(bottom, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
 		global.setWeights(new int[] { 70, 30 });
+		// 将窗口上的文本框配置到日志中，以便将日志信息打印到文本框中。
+		SyncAppender syncAppender = (SyncAppender) logger.getAppenders().get("SyncAppender");
+		syncAppender.setText(syncLogText);
 		return parent;
 	}
 
@@ -244,7 +252,7 @@ public class FileSyncSWTClient extends ApplicationWindow {
     private void createSyncButton(Composite top) {
 		Composite syncButtonComposite = new Composite(top, SWT.NONE);
 		syncButtonComposite.setLayout(new GridLayout(1, false));
-		Button syncButton = new Button(top, SWT.NONE);
+		final Button syncButton = new Button(top, SWT.NONE);
 		syncButton.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
 		syncButton.setText("开始同步");
 		syncButton.addSelectionListener(new SelectionListener() {
@@ -252,7 +260,7 @@ public class FileSyncSWTClient extends ApplicationWindow {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TableItem[] syncPathItems = syncPathTable.getItems();
-				java.util.List<String> syncPaths = new LinkedList<String>();
+				final java.util.List<String> syncPaths = new LinkedList<String>();
 				for(TableItem syncPathItem : syncPathItems){
 				    if(syncPathItem.getChecked())
 				        syncPaths.add(syncPathItem.getText());
@@ -266,7 +274,7 @@ public class FileSyncSWTClient extends ApplicationWindow {
 				String filterName = syncFilterList.getSelection()[0];
 				// 清空日志信息
 				syncLogText.setText("");
-				
+				// 让用户确认选择
 				StringBuffer confirmBuffer = new StringBuffer();
 				confirmBuffer.append("同步路径：");
 				for(String syncPath : syncPaths){
@@ -278,14 +286,30 @@ public class FileSyncSWTClient extends ApplicationWindow {
 				        "确认进行文件夹同步吗？", confirmBuffer.toString());
 				if(!confirm)
 				    return;
+				// 将同步按钮置为失效
+				syncButton.setText("同步中...");
+				syncButton.setEnabled(false);
 				
 				SyncFilter syncFilter = syncFilterConfig.getSyncFilters().get(filterName);
-				SyncStrategy syncStrategy = new DefaultSyncStrategy(syncFilter);
-				for(String path : syncPaths){
-                    SyncPath syncPath = SyncPath.instance(path);
-                    FileSync fileSync = new FileSync();
-                    fileSync.fileSync(syncPath, syncStrategy);
-                }
+				final SyncStrategy syncStrategy = new DefaultSyncStrategy(syncFilter);
+				// 另开线程，异步执行长耗时任务
+				executor.execute(new Runnable() {
+					
+					@Override
+					public void run() {
+						//
+						new FileSync().fileSyncBatch(syncPaths, syncStrategy);
+						// 任务执行后，通知UI线程恢复按钮可用
+						Display.getDefault().asyncExec(new Runnable() {
+							
+							@Override
+							public void run() {
+								syncButton.setEnabled(true);
+								syncButton.setText("开始同步");
+							}
+						});
+					}
+				});
 			}
 
 			@Override
@@ -328,6 +352,7 @@ public class FileSyncSWTClient extends ApplicationWindow {
     protected void handleShellCloseEvent() {
         saveSyncPathData();
         syncFilterConfig.save();
+        executor.shutdownNow();
         super.handleShellCloseEvent();
     }
     

@@ -11,11 +11,17 @@ import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.layout.PatternLayout;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Text;
+
+import youli.open.filesync.sync.EnvConfig;
 
 @Plugin(name = "SyncAppender", category = "Core", elementType = "appender", printObject = true)
 public class SyncAppender extends AbstractAppender {
 
     private static final long serialVersionUID = 1L;
+    
+    private Text text; 
     
     protected SyncAppender(String name, Filter filter, Layout<? extends Serializable> layout) {
         super(name, filter, layout);
@@ -39,7 +45,27 @@ public class SyncAppender extends AbstractAppender {
 
     @Override
     public void append(LogEvent event) {
-        // TODO Auto-generated method stub
+        if (text == null || text.isDisposed())
+        	return;
+        
+        final String log = new String(getLayout().toByteArray(event), EnvConfig.CONF_CHARSET);
+        Display.getDefault().asyncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (text == null || text.isDisposed())
+		        	return;
+				text.append(log);
+			}
+		});
     }
+
+	public Text getText() {
+		return text;
+	}
+
+	public void setText(Text text) {
+		this.text = text;
+	}
 
 }
