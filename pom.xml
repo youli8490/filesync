@@ -119,15 +119,6 @@
 			<plugin><!-- 此处设置MANIFEST.MF文件的Main-Class与Class-Path -->
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.3.2</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix></classpathPrefix>
-							<mainClass>youli.open.filesync.client.jface.FileSyncSWTClient</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
