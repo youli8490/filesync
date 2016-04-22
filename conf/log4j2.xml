@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN" packages="youli.open.filesync.log">
 	<Appenders>
-		<File name="File" fileName="../logs/filesync.log">
-			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} -- %msg%n" />
-		</File>
+		<RollingFile name="File" fileName="logs/filesync.log" filePattern="logs/filesync-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+		</RollingFile>
 		<Console name="Console" target="SYSTEM_OUT">
-			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} -- %msg%n" />
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</Console>
 		<SyncAppender name="SyncAppender">
-			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} -- %msg%n" />
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</SyncAppender>
 	</Appenders>
 	<Loggers>
 		<Logger name="youli.open.filesync" level="info" additivity="false">
-			<AppenderRef ref="Console" />
+			<AppenderRef ref="File" />
 			<AppenderRef ref="SyncAppender" />
 		</Logger>
 		<Root level="info">
-			<AppenderRef ref="Console" />
 			<AppenderRef ref="File" />
 		</Root>
 	</Loggers>
