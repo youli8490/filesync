@@ -31,7 +31,11 @@ public class FileSync {
 	    
 		File source = new File(syncPath.getSource());
 		File destParent = new File(syncPath.getDestination());
-		doFileSync(source, destParent, syncStrategy);
+		try{
+		    doFileSync(source, destParent, syncStrategy);
+		}catch (RuntimeException e){
+		    logger.error("同步过程异常！", e);
+		}
 	}
 	
 	private void doFileSync(File source, File destParent, SyncStrategy syncStrategy) {

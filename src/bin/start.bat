@@ -4,12 +4,11 @@ if %1 == "" (
 	pause
 	exit
 )
-set lib_dir=%1/lib
+cd ..
 set class_path=filesync-0.0.1-SNAPSHOT.jar;
 setlocal enabledelayedexpansion
-for /f "delims=\" %%a in ('dir /b "%lib_dir%"') do (
+for /f "delims=\" %%a in ('dir /b lib') do (
 	rem if或for复合语句中，取变量名使用!而不是%
 	set class_path=!class_path!./lib/%%a;
 )
-cd ..
 start javaw -classpath %class_path% -Dfile.encoding=UTF-8 -DWORKING_HOME=%1 youli/open/filesync/client/jface/FileSyncSWTClient

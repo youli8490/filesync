@@ -34,7 +34,7 @@ public class DefaultSyncStrategy implements SyncStrategy {
     @Override
     public boolean isSync(File file) {
         for (String white : syncStrategyWhite) {
-            if (file.getAbsolutePath().contains(white)) {
+            if (file.getAbsolutePath().matches(white)) {
                 logger.debug("（" + file.getAbsolutePath() + "）匹配了白名单策略（" + white + "）");
                 return true;
             }
