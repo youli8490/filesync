@@ -35,10 +35,17 @@ public class FileUtil {
             file.delete();
             return;
         }
-        // file代表目录时，先删除目录下的所有文件
-        for (File child : file.listFiles()) {
-            deleteFile(child);
+        
+        File[] children = file.listFiles();
+        if(children == null){// 文件夹存在，但引用了一个不存在的位置
+        	logger.warn("目录（" + file.getAbsolutePath() + "）无法访问，直接删除！");
+        }else{
+	        // file代表目录时，先删除目录下的所有文件
+	        for (File child : children) {
+	            deleteFile(child);
+	        }
         }
+        
         // 当file为空目录时，删除空目录
         logger.info("删除目录：" + file.getAbsolutePath());
         file.delete();
@@ -98,7 +105,7 @@ public class FileUtil {
             } while (length == FILE_COPY_BUF_NUM);
 
         } catch (IOException e) {
-            logger.error(source.getAbsolutePath() + "文件拷贝失败!");
+            logger.error(source.getAbsolutePath() + "文件拷贝失败!", e);
         } finally {
             try {
                 if (fis != null)
@@ -106,7 +113,7 @@ public class FileUtil {
                 if (fos != null)
                     fos.close();
             } catch (IOException e) {
-                logger.error("文件拷贝结束后，释放资源失败！");
+                logger.error("文件拷贝结束后，释放资源失败！", e);
             }
         }
     }
