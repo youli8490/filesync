@@ -40,15 +40,21 @@ public class FileSyncCache {
 		// 文件不存在、或不是目录、再或不满足同步策略，返回null
 		if (!syncedDirectory.exists() || !syncedDirectory.isDirectory() || !syncStrategy.isSync(syncedDirectory))
 			return directorySyncData;
+		// windows上，有时存在一些目录无法访问，这些目录不进行同步
+		File[] files = syncedDirectory.listFiles();
+		if (files == null){
+			logger.warn("目录（" + syncedDirectory.getAbsolutePath() + "）无法访问，忽略同步！");
+			return directorySyncData;
+		}
+		
 		directorySyncData = new DirectorySyncData();
 		// 设置目录的绝对路径
 		directorySyncData.setFilePath(syncedDirectory.getAbsolutePath());
 		// 1、从硬盘上读取缓存数据
 		boolean conflictWithUserFile = initDirectorySyncData(syncedDirectory, directorySyncData);
-		// 2、更新缓存数据
-		File[] files = syncedDirectory.listFiles();
 		// 是否需要回写到硬盘
 		boolean needSave = false;
+		// 2、更新缓存数据
 		for (File f : files) {
 			if (f.isDirectory()) {
 				DirectorySyncData childDirectorySyncData = computeDirectorySyncCache(f, syncStrategy);
