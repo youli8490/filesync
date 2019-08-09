@@ -1,14 +1,26 @@
-rem this is a GBK encode File
-if %1 == "" (
+@echo off
+
+rem rem æ³¨é‡ŠæŒ‡ä»¤
+rem @ æŒ‡ä»¤ä¸åœ¨æ§åˆ¶å°æ‰“å°
+rem echo off å…³é—­æŒ‡ä»¤åœ¨æ§åˆ¶å°æ‰“å°åŠŸèƒ½
+
+cd ..
+
+set work_home=%cd%
+
+if %work_home% == "" (
 	echo fail!
 	pause
 	exit
 )
-cd ..
-set class_path=filesync-0.0.1-SNAPSHOT.jar;
+
+set class_path="";
+
 setlocal enabledelayedexpansion
+
 for /f "delims=\" %%a in ('dir /b lib') do (
-	rem if»òfor¸´ºÏÓï¾äÖĞ£¬È¡±äÁ¿ÃûÊ¹ÓÃ!¶ø²»ÊÇ%
+	rem ifæˆ–forå¤åˆè¯­å¥ä¸­ï¼Œå–å˜é‡åä½¿ç”¨!è€Œä¸æ˜¯%
 	set class_path=!class_path!./lib/%%a;
 )
-start javaw -classpath %class_path% -Dfile.encoding=UTF-8 -DWORKING_HOME=%1 youli/open/filesync/client/jface/FileSyncSWTClient
+
+start javaw -classpath %class_path% -Dfile.encoding=UTF-8 -DWORKING_HOME=%work_home% youli/open/filesync/client/jface/FileSyncSWTClient
