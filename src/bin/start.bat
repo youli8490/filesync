@@ -23,4 +23,4 @@ for /f "delims=\" %%a in ('dir /b lib') do (
 	set class_path=!class_path!./lib/%%a;
 )
 
-start javaw -classpath %class_path% -Dfile.encoding=UTF-8 -DWORKING_HOME=%work_home% youli/open/filesync/client/jface/FileSyncSWTClient
+start javaw -classpath %class_path% -Dfile.encoding=UTF-8 -DWORKING_HOME=%work_home% youli/open/filesync/client/swing/FileSyncSwingClient

@@ -12,6 +12,8 @@ import youli.open.filesync.util.FileUtil;
 public class SyncPathConfig {
     
     private static Logger logger = LoggerFactory.getLogger(SyncPathConfig.class);
+
+    public static SyncPathConfig INSTANCE = new SyncPathConfig();
     
     private List<String> syncPaths;
     

@@ -10,14 +10,14 @@
 		<Console name="Console" target="SYSTEM_OUT">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</Console>
-		<SyncAppender name="SyncAppender">
+		<SyncAppenderSwing name="SyncAppenderSwing">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
-		</SyncAppender>
+		</SyncAppenderSwing>
 	</Appenders>
 	<Loggers>
 		<Logger name="youli.open.filesync" level="info" additivity="false">
 			<AppenderRef ref="File" />
-			<AppenderRef ref="SyncAppender" />
+			<AppenderRef ref="SyncAppenderSwing" />
 		</Logger>
 		<Root level="info">
 			<AppenderRef ref="File" />

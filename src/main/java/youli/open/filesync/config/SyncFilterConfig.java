@@ -16,6 +16,9 @@ import youli.open.filesync.util.FileUtil;
 public class SyncFilterConfig {
     
     private static Logger logger = LoggerFactory.getLogger(SyncFilterConfig.class);
+
+    public static SyncFilterConfig INSTANCE = new SyncFilterConfig();
+
     private Map<String, SyncFilter> syncFilters;
     
     public SyncFilterConfig(){

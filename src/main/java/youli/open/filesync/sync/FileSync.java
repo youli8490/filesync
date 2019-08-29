@@ -43,7 +43,7 @@ public class FileSync {
 			logger.warn("源文件夹（" + source.getAbsolutePath() + "）或目标文件夹（" + destParent.getAbsolutePath() + "）不存在");
 			return;
 		}
-		logger.info(source.getAbsolutePath() + "-->" + destParent.getAbsolutePath() + "，开始同步");
+		logger.info("{}-->{}，开始同步", source.getAbsolutePath(), destParent.getAbsolutePath());
 		DirectorySyncData sourceSyncData = FileSyncCache.computeDirectorySyncCache(source, syncStrategy);
 		DirectorySyncData destSyncData = FileSyncCache.computeDirectorySyncCache(new File(destParent, source.getName()), syncStrategy);
 		if (sourceSyncData == null) {

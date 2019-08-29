@@ -9,7 +9,15 @@ public class SyncPath {
     
 	private String source;
 	private String destination;
-	
+
+	public SyncPath() {
+	}
+
+	public SyncPath(String source, String destination) {
+		this.source = source;
+		this.destination = destination;
+	}
+
 	public static SyncPath instance(String str){
 		if(str == null)
 			return null;

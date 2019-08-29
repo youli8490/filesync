@@ -30,91 +30,18 @@
 			<artifactId>log4j-core</artifactId>
 			<version>2.2</version>
 		</dependency>
-		<!-- SWT start -->
 		<dependency>
-			<groupId>com.ibm</groupId>
-			<artifactId>icu_54.1.1</artifactId>
-			<version>v201501272100</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/swt/com.ibm.icu_54.1.1.v201501272100.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>core.commands_3.7.0</artifactId>
-			<version>v20150422-0725</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/swt/org.eclipse.core.commands_3.7.0.v20150422-0725.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>equinox.common_3.7.0</artifactId>
-			<version>v20150402-1709</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/swt/org.eclipse.equinox.common_3.7.0.v20150402-1709.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>equinox.registry_3.6.0</artifactId>
-			<version>v20150318-1503</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/swt/org.eclipse.equinox.registry_3.6.0.v20150318-1503.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>jface.text_3.10.0</artifactId>
-			<version>v20150603-1752</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/swt/org.eclipse.jface.text_3.10.0.v20150603-1752.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>jface_3.11.0</artifactId>
-			<version>v20150602-1400</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/swt/org.eclipse.jface_3.11.0.v20150602-1400.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>osgi_3.10.101</artifactId>
-			<version>v20150820-1432</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/swt/org.eclipse.osgi_3.10.101.v20150820-1432.jar</systemPath>
-		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.eclipse</groupId>-->
-<!--			<artifactId>swt.win32.win32.x86_64_3.104.1</artifactId>-->
-<!--			<version>v20150825-0743</version>-->
-<!--			<scope>system</scope>-->
-<!--			<systemPath>${project.basedir}/libs/swt/org.eclipse.swt.win32.win32.x86_64_3.104.1.v20150825-0743.jar</systemPath>-->
-<!--		</dependency>-->
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>text_3.5.400</artifactId>
-			<version>v20150505-1044</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/swt/org.eclipse.text_3.5.400.v20150505-1044.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>ui.forms_3.6.200</artifactId>
-			<version>v20150506-2029</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/swt/org.eclipse.ui.forms_3.6.200.v20150506-2029.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>ui.workbench_3.107.0</artifactId>
-			<version>v20150825-2206</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/swt/org.eclipse.ui.workbench_3.107.0.v20150825-2206.jar</systemPath>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.8.1</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.eclipse.swt</groupId>
-			<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
-			<version>4.3</version>
+			<groupId>com.jidesoft</groupId>
+			<artifactId>jide-oss</artifactId>
+			<version>3.6.9</version>
 		</dependency>
-		<!-- SWT end -->
+
 	</dependencies>
 	<build>
 		<plugins>
@@ -123,8 +50,8 @@
 				<version>2.3.2</version>
 				<configuration>
 					<skip>true</skip><!-- 跳过测试源代码 -->
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin><!-- 此处设置MANIFEST.MF文件的Main-Class与Class-Path -->
@@ -157,6 +84,14 @@
 					</execution>
 				</executions>
 			</plugin>
-		</plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
 	</build>
 </project>
